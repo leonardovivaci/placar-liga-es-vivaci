@@ -287,6 +287,19 @@
   .eqtbl .rm{border:none;background:transparent;color:var(--muted);font-size:17px;cursor:pointer;
     width:34px;height:34px;border-radius:8px;line-height:1}
   .printhead{display:none}
+  .hbsub{display:block;font-size:10.5px;color:var(--muted);font-weight:600;margin-top:1px;
+    font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .avisotopo{display:block;padding:11px 16px;font-size:12.5px;line-height:1.45;
+    border-bottom:1px solid var(--line);background:#F7EFE2;color:var(--miss-ink)}
+  .avisotopo.teste{background:#EAF4F9;color:var(--brand-ink);border-bottom-color:#CFE4EF}
+  .avisotopo.erro{background:#FBE9E7;color:#8A2E17;border-bottom-color:#F0CFC7}
+  .avisotopo b{display:block;font-weight:700;margin-bottom:2px}
+  .emoopt.novo{border-style:dashed;color:var(--brand-ink);font-weight:700}
+  .edplus{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;
+    border-radius:50%;background:var(--brand);color:#fff;font-size:12px;font-weight:700;margin-right:6px;line-height:1}
+  .bkprow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .bkpinfo{font-size:11.5px;color:var(--ans-ink);font-weight:600;margin-top:7px;min-height:15px}
+  .bkpinfo.erro{color:var(--miss-ink)}
   .whotabs{display:flex;gap:6px;background:#F1EDE6;padding:4px;border-radius:12px;margin-bottom:14px;
     overflow-x:auto;scrollbar-width:none}
   .whotabs::-webkit-scrollbar{display:none}
@@ -802,7 +815,18 @@
       </div>
     </div>
     <div class="setrow">
-      <div><div class="sl">Dados guardados</div><div class="sd" id="datainfo">—</div></div>
+      <div><div class="sl">Dados guardados</div><div class="sd" id="datainfo">—</div>
+        <div class="sd" id="gravinfo" style="margin-top:3px"></div></div>
+    </div>
+    <div class="setrow" style="display:block">
+      <div><div class="sl">Cópia de segurança</div>
+        <div class="sd">Baixe um arquivo com tudo: seus dias, contatos, equipe e metas. Serve para restaurar ou levar para outro aparelho.</div></div>
+      <div class="bkprow">
+        <button class="cebtn primary" id="bkp-export">Baixar cópia</button>
+        <button class="cebtn" id="bkp-import">Restaurar de um arquivo</button>
+        <input type="file" id="bkp-file" accept="application/json,.json" style="display:none">
+      </div>
+      <div class="bkpinfo" id="bkp-info"></div>
     </div>
   </div>
 
@@ -940,9 +964,10 @@ const RESULTS=[
 
 const store={
   async get(k){try{const r=await window.storage.get(k);return r?JSON.parse(r.value):null;}catch(e){return mem[k]??null;}},
-  async set(k,v){try{await window.storage.set(k,JSON.stringify(v));}catch(e){mem[k]=v;}}
+  async set(k,v){try{await window.storage.set(k,JSON.stringify(v));return true;}catch(e){mem[k]=v;return true;}}
 };
 let mem={};
+const MODO_TESTE=true;   /* versão de teste: os dados não ficam no aparelho */
 
 function todayStr(){const d=new Date();return d.toISOString().slice(0,10);}
 function dayKey(d){return d.toISOString().slice(0,10);}
@@ -1043,6 +1068,29 @@ async function runSeed(){
   return true;
 }
 
+/* ===== VIRADA DE DIA COM O APP ABERTO ===== */
+let diaAtualRef=null;
+async function checarViradaDeDia(){
+  const agora=todayStr();
+  if(!diaAtualRef){diaAtualRef=agora;return;}
+  if(agora===today.date)return;
+  /* o relógio passou da meia-noite com o app aberto */
+  const anterior=today;
+  if(dayHasContent(anterior)){
+    commitContacts(anterior);archive(anterior);
+    await store.set('callboard:contacts',contacts);
+    await store.set('callboard:history',history);
+  }
+  today=freshDay();
+  await store.set('callboard:today',today);
+  tmr={mode:'foco',running:false,endsAt:null,left:tmrDur('foco'),done:0};
+  await saveTimer();
+  diaAtualRef=agora;
+  renderDate();renderList();renderScore(false);renderActs();renderResumo();renderTimer();renderGoalSub();
+  const vcal=document.getElementById('view-calendario');
+  if(vcal&&vcal.style.display!=='none'){renderCalendar();if(selDate)renderDayRecord(selDate);}
+  flash(`Novo dia · ${fmtLong(anterior.date)} foi guardado no histórico`);
+}
 async function load(){
   history=(await store.get('callboard:history')||[]).map(normEntry);
   contacts=await store.get('callboard:contacts')||{};
@@ -1081,7 +1129,13 @@ async function load(){
     }
   }else{tmr={mode:'foco',running:false,endsAt:null,left:tmrDur('foco'),done:0};}
   const ps=progressSnapshot();gLevel=ps.lvl;gMedals=ps.med;
+  diaAtualRef=today.date;
+  await testarGravacao();
   renderDate();renderList();renderScore(false);renderActs();renderResumo();renderContacts();renderGoalSub();renderTimer();
+  /* confere a virada a cada meio minuto e sempre que o app volta ao primeiro plano */
+  setInterval(checarViradaDeDia,30000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)checarViradaDeDia();});
+  window.addEventListener('focus',checarViradaDeDia);
 }
 function counts(arr){
   const a=arr||today.calls;
@@ -1197,8 +1251,25 @@ function updateMeta(){
         o.onclick=()=>{s.emotion=(s.emotion===e.key)?null:e.key;save();updateMeta();};
         pick.appendChild(o);
       });
+      /* criar um sentimento novo aqui mesmo — ele passa a valer para as próximas ligações */
+      const novo=document.createElement('button');novo.className='emoopt novo';novo.type='button';
+      novo.innerHTML='<span class="edplus">+</span>novo sentimento';
+      novo.onclick=async()=>{
+        const nome=collapse(prompt('Como você chamaria esse sentimento?','')||'');
+        if(!nome)return;
+        const igual=EMOTIONS.find(e=>normName(e.label)===normName(nome));
+        if(igual){s.emotion=igual.key;save();updateMeta();flash(`"${igual.label}" já existia — selecionado`);return;}
+        if(CUSTOM_EMOS.length>=10){flash('Limite de 10 sentimentos próprios');return;}
+        const chave=emoKeyFrom(nome);
+        CUSTOM_EMOS.push({key:chave,label:nome,color:EMO_PALETA[CUSTOM_EMOS.length%EMO_PALETA.length]});
+        rebuildEmotions();await saveSettings();
+        s.emotion=chave;save();updateMeta();
+        if(setOpen)renderEmoChips();
+        flash(`"${nome}" entrou na lista`);
+      };
+      pick.appendChild(novo);
       const wrap=document.createElement('div');wrap.className='emonote';
-      const ni=document.createElement('input');ni.type='text';ni.placeholder='escrever o que senti…';
+      const ni=document.createElement('input');ni.type='text';ni.placeholder='observação só desta ligação…';
       ni.value=s.emotionNote||'';ni.oninput=()=>{s.emotionNote=ni.value;save();};
       const done=document.createElement('button');done.className='emoopt clear';done.type='button';done.textContent='fechar';
       done.onclick=()=>{emoOpen=null;save();updateMeta();};
@@ -1576,7 +1647,7 @@ function renderPerf(){
   </div>`;
   if(prev&&prev.made>0){
     const falta=prev.made-cur.made, p=Math.min(100,Math.round(cur.made/prev.made*100));
-    const nome=prev.label+(prev.sub?' '+prev.sub:'');
+    const nome=prev.label+(prev.sub?' ('+prev.sub+')':'');
     h+=`<div class="perfgoal">
       <div class="pgt">${falta>0
         ?`Faltam <b>${falta}</b> ligações para passar ${nome}`
@@ -1600,9 +1671,27 @@ function renderResumo(){renderPerf();}
 const MES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
 let calY,calM,selDate=null;
 function dayAgg(ds){
-  if(ds===today.date){const c=counts(),pc=periodCounts();
-    return{made:c.made,ans:c.ans,...pc,tallies:today.tallies||{},details:today.details||{},actTimes:today.actTimes||{},sales:today.sales||[],focus:today.focus||[],notes:today.notes||'',
-      calls:today.calls.filter(s=>s.status>0).map(s=>({name:collapse(s.name),time:s.time,answered:s.status===2,emotion:s.emotion})),live:true};}
+  if(ds===today.date){
+    const c=counts(),pc=periodCounts();
+    const vivo={made:c.made,ans:c.ans,...pc,tallies:Object.assign({},today.tallies||{}),
+      details:today.details||{},actTimes:today.actTimes||{},sales:(today.sales||[]).slice(),
+      focus:(today.focus||[]).slice(),notes:today.notes||'',
+      calls:today.calls.filter(s=>s.status>0).map(s=>({name:collapse(s.name),time:s.time,answered:s.status===2,emotion:s.emotion})),live:true};
+    /* se o histórico já tem um registro desta mesma data, soma em vez de contar duas vezes */
+    const ant=history.find(x=>x.date===ds);
+    if(ant){
+      vivo.made+=ant.made||0;vivo.ans+=ant.ans||0;
+      vivo.mMade+=ant.mMade||0;vivo.mAns+=ant.mAns||0;
+      vivo.aMade+=ant.aMade||0;vivo.aAns+=ant.aAns||0;
+      Object.entries(ant.tallies||{}).forEach(([k,v])=>{vivo.tallies[k]=(vivo.tallies[k]||0)+v;});
+      vivo.sales=vivo.sales.concat(ant.sales||[]);
+      vivo.focus=vivo.focus.concat(ant.focus||[]);
+      vivo.calls=(ant.calls||[]).concat(vivo.calls);
+      const n=(ant.notes||'').trim();
+      if(n)vivo.notes=vivo.notes.trim()?n+'\n'+vivo.notes:n;
+    }
+    return vivo;
+  }
   const h=history.find(x=>x.date===ds);
   return h?{...h,live:false}:null;
 }
@@ -1785,7 +1874,8 @@ function openCalendar(){
 /* ===== RELATÓRIO ===== */
 function daysInRange(from,to){
   const out=[];
-  history.forEach(h=>{if(h.date>=from&&h.date<=to)out.push(h);});
+  /* o dia de hoje entra uma vez só: dayAgg já soma o que estiver no histórico */
+  history.forEach(h=>{if(h.date>=from&&h.date<=to&&h.date!==today.date)out.push(h);});
   const a=dayAgg(today.date);
   if(today.date>=from&&today.date<=to&&a&&(a.made>0||Object.values(a.tallies).some(v=>v>0)||a.notes.trim()))
     out.push({date:today.date,made:a.made,ans:a.ans,mMade:a.mMade,mAns:a.mAns,aMade:a.aMade,aAns:a.aAns,
@@ -1804,29 +1894,32 @@ function allDays(){
   return out.sort((x,y)=>x.date.localeCompare(y.date));
 }
 function isoWeek(ds){
+  /* domingo a sábado, igual às faixas do calendário */
   const d=new Date(ds+'T12:00:00');
-  const t=new Date(d.getFullYear(),d.getMonth(),d.getDate());
-  const day=(t.getDay()+6)%7;                 // segunda = 0
-  t.setDate(t.getDate()-day+3);               // quinta da semana
-  const firstThu=new Date(t.getFullYear(),0,4);
-  const fday=(firstThu.getDay()+6)%7;
-  firstThu.setDate(firstThu.getDate()-fday+3);
-  const week=1+Math.round((t-firstThu)/(7*864e5));
-  return {key:`${t.getFullYear()}-W${String(week).padStart(2,'0')}`,
+  const ini=new Date(d.getFullYear(),d.getMonth(),d.getDate()-d.getDay());
+  const fim=new Date(ini);fim.setDate(ini.getDate()+6);
+  /* número da semana: quantos domingos desde o primeiro do ano */
+  const primeiro=new Date(ini.getFullYear(),0,1);
+  const primDom=new Date(primeiro);primDom.setDate(primeiro.getDate()-primeiro.getDay());
+  const week=1+Math.round((ini-primDom)/(7*864e5));
+  return {key:`${ini.getFullYear()}-W${String(week).padStart(2,'0')}`,
           label:`sem ${String(week).padStart(2,'0')}`,
-          sub:`${t.getFullYear()}`};
+          sub:`${fmt(dayKey(ini))} a ${fmt(dayKey(fim))}`,
+          from:dayKey(ini),to:dayKey(fim)};
 }
 function periodKeyOf(ds,gran){
   if(gran==='semana')return isoWeek(ds);
   if(gran==='ano')return {key:ds.slice(0,4),label:ds.slice(0,4),sub:''};
   const[y,m]=ds.split('-');
-  return {key:`${y}-${m}`,label:MES[parseInt(m,10)-1].slice(0,3),sub:y};
+  const ult=new Date(parseInt(y,10),parseInt(m,10),0).getDate();
+  return {key:`${y}-${m}`,label:MES[parseInt(m,10)-1].slice(0,3),sub:`01/${m} a ${ult}/${m}`,
+          from:`${y}-${m}-01`,to:`${y}-${m}-${ult}`};
 }
 function groupBy(gran){
   const map={};
   allDays().forEach(d=>{
     const p=periodKeyOf(d.date,gran);
-    if(!map[p.key])map[p.key]={key:p.key,label:p.label,sub:p.sub,made:0,ans:0,dias:0,acts:0};
+    if(!map[p.key])map[p.key]={key:p.key,label:p.label,sub:p.sub,from:p.from,to:p.to,made:0,ans:0,dias:0,acts:0};
     const g=map[p.key];g.made+=d.made;g.ans+=d.ans;if(d.made>0)g.dias++;
     ACTS.concat(RESULTS).forEach(t=>{g.acts+=(d.tallies[t.key]||0);});
   });
@@ -1870,11 +1963,11 @@ function evolutionHTML(){
       <span style="margin-left:auto">últimos ${show.length} · ${nomes[gran]}${show.length>1?'s':''}</span></div>`;
   h+=`<h4 class="evoh4">Taxa de atendimento por ${nomes[gran]}</h4><div class="hbars">`+
     show.map(g=>{const r=pct(g.ans,g.made);
-      return `<div class="hb"><span class="hbl">${g.label}${g.sub?' <span class="hbsub">'+g.sub+'</span>':''}</span>
+      return `<div class="hb"><span class="hbl" title="${g.from?fmtLong(g.from)+' a '+fmtLong(g.to):''}">${g.label}${g.sub?'<span class="hbsub">'+g.sub+'</span>':''}</span>
       <div class="hbt"><div class="hbf ans" style="width:${r}%"></div></div><span class="hbv">${r}% · ${g.ans}/${g.made}</span></div>`;}).join('')+`</div>`;
   h+=`<table class="reptable evotable"><thead><tr><th>${nomes[gran].charAt(0).toUpperCase()+nomes[gran].slice(1)}</th>
       <th>Dias</th><th>Ligações</th><th>Atend.</th><th>Taxa</th><th>Média/dia</th><th>Atividades</th></tr></thead><tbody>`+
-    show.slice().reverse().map(g=>`<tr><td>${g.label}${g.sub?' <span class="hbsub">'+g.sub+'</span>':''}</td><td>${g.dias}</td><td>${g.made}</td>
+    show.slice().reverse().map(g=>`<tr><td>${g.label}${g.sub?'<span class="hbsub">'+g.sub+'</span>':''}</td><td>${g.dias}</td><td>${g.made}</td>
       <td>${g.ans}</td><td>${pct(g.ans,g.made)}%</td><td>${g.dias?(g.made/g.dias).toFixed(1):'0'}</td><td>${g.acts}</td></tr>`).join('')+
     `</tbody></table>`;
   return h;
@@ -2562,7 +2655,8 @@ async function dropCall(scope,ds,idx){
 function refreshAll(){
   renderList();renderScore(false);renderResumo();renderContacts();
   if(typeof renderProgress==='function')renderProgress();
-  if(document.getElementById('view-calendario').style.display!=='none'){renderCalendar();renderDayRecord(selDate);}
+  const vcal=document.getElementById('view-calendario');
+  if(vcal&&vcal.style.display!=='none'){renderCalendar();if(selDate)renderDayRecord(selDate);}
   renderGoalSub();
 }
 /* ===== CONFIGURAÇÕES ===== */
@@ -2675,7 +2769,7 @@ function toggleSettings(force){
   setOpen=(force===undefined)?!setOpen:force;
   document.getElementById('settings').style.display=setOpen?'':'none';
   document.getElementById('gear').classList.toggle('on',setOpen);
-  if(setOpen){renderGoalSub();renderActChips();renderEmoChips();}
+  if(setOpen){renderGoalSub();renderActChips();renderEmoChips();atualizarDiagnostico();}
 }
 function bindSettings(){
   document.getElementById('gear').onclick=()=>toggleSettings();
@@ -2690,6 +2784,13 @@ function bindSettings(){
   step('foco','foco',5,90); step('curta','curta',1,30); step('longa','longa',5,60);
   document.getElementById('na-add').onclick=addCustomAct;
   document.getElementById('ne-add').onclick=addCustomEmo;
+  document.getElementById('bkp-export').onclick=exportarDados;
+  document.getElementById('bkp-import').onclick=()=>document.getElementById('bkp-file').click();
+  document.getElementById('bkp-file').onchange=e=>{
+    const f=e.target.files&&e.target.files[0];
+    if(f)importarDados(f);
+    e.target.value='';
+  };
   document.getElementById('ne-label').onkeydown=(e)=>{if(e.key==='Enter')addCustomEmo();};
   document.getElementById('na-label').onkeydown=(e)=>{if(e.key==='Enter')addCustomAct();};
   document.getElementById('na-detail').onkeydown=(e)=>{if(e.key==='Enter')addCustomAct();};
@@ -3282,6 +3383,86 @@ function bindTeam(){
   document.getElementById('eq-apply').onclick=aplicar;
 }
 
+/* ===== CÓPIA DE SEGURANÇA ===== */
+const CHAVES_BACKUP=['callboard:history','callboard:today','callboard:contacts','callboard:settings',
+  'callboard:team','callboard:salesgoals','callboard:timer','callboard:muted',
+  'callboard:seed:v1','callboard:team:seed:v1'];
+async function exportarDados(){
+  const pacote={app:'Vivaz',versao:1,gerado:new Date().toISOString(),dados:{}};
+  for(const k of CHAVES_BACKUP){
+    const v=await store.get(k);
+    if(v!==null&&v!==undefined)pacote.dados[k]=v;
+  }
+  const txt=JSON.stringify(pacote,null,1);
+  const nome=`vivaz-backup-${todayStr()}.json`;
+  try{
+    const blob=new Blob([txt],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download=nome;
+    document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},1500);
+    const dias=(pacote.dados['callboard:history']||[]).length;
+    infoBackup(`Cópia baixada · ${dias} dia${dias===1?'':'s'} de histórico`);
+  }catch(e){infoBackup('Não foi possível baixar aqui. Abra pelo Safari.',true);}
+}
+function infoBackup(msg,erro){
+  const el=document.getElementById('bkp-info');
+  if(el){el.textContent=msg;el.classList.toggle('erro',!!erro);}
+  flash(msg);
+}
+async function importarDados(file){
+  try{
+    const txt=await file.text();
+    const pacote=JSON.parse(txt);
+    if(!pacote||!pacote.dados||typeof pacote.dados!=='object')throw new Error('formato');
+    const dias=(pacote.dados['callboard:history']||[]).length;
+    if(!confirm(`Restaurar a cópia de ${pacote.gerado?fmtLong(pacote.gerado.slice(0,10)):'data desconhecida'}?\n\n${dias} dia(s) de histórico. Isso substitui o que está neste aparelho agora.`))return;
+    for(const k of CHAVES_BACKUP){
+      if(pacote.dados[k]!==undefined)await store.set(k,pacote.dados[k]);
+    }
+    infoBackup('Cópia restaurada · recarregando');
+    setTimeout(()=>{try{location.reload();}catch(e){load();}},700);
+  }catch(e){infoBackup('Arquivo inválido ou danificado',true);}
+}
+/* ===== O APP AVISA SE NÃO ESTIVER CONSEGUINDO GRAVAR ===== */
+let gravacaoOK=null;
+function bannerAviso(titulo,texto,tipo){
+  let el=document.getElementById('avisoTopo');
+  if(!el){
+    el=document.createElement('div');el.id='avisoTopo';el.className='avisotopo noprint';
+    document.body.insertBefore(el,document.body.firstChild);
+  }
+  el.className='avisotopo noprint '+(tipo||'');
+  el.innerHTML=`<b>${esc(titulo)}</b><span>${esc(texto)}</span>`;
+}
+function limparAviso(){const el=document.getElementById('avisoTopo');if(el)el.remove();}
+async function testarGravacao(){
+  const marca='callboard:__teste';
+  const valor='t'+Date.now();
+  let ok=false;
+  try{
+    await store.set(marca,valor);
+    const lido=await store.get(marca);
+    ok=(lido===valor);
+  }catch(e){ok=false;}
+  gravacaoOK=ok;
+  if(typeof MODO_TESTE!=='undefined'&&MODO_TESTE){
+    bannerAviso('Versão de teste','Este arquivo serve para experimentar. Para uso real, abra o app pelo ícone do Safari — só lá os dados ficam guardados no aparelho.','teste');
+  }else if(!ok){
+    bannerAviso('O app não está conseguindo guardar seus dados',
+      'Isso acontece em aba privada do Safari ou com o armazenamento bloqueado. Saia da navegação privada e abra pelo ícone na tela de início.','erro');
+  }else limparAviso();
+  return ok;
+}
+function atualizarDiagnostico(){
+  const el=document.getElementById('gravinfo');if(!el)return;
+  if(typeof MODO_TESTE!=='undefined'&&MODO_TESTE){
+    el.textContent='Versão de teste — não guarda no aparelho';el.style.color='var(--brand-ink)';return;
+  }
+  if(gravacaoOK===null){el.textContent='';return;}
+  el.textContent=gravacaoOK?'Gravação funcionando neste aparelho ✓':'ATENÇÃO: o navegador está recusando gravar';
+  el.style.color=gravacaoOK?'var(--ans-ink)':'var(--miss-ink)';
+}
 function renderMute(){document.getElementById('mute').innerHTML=muted?SPK_OFF:SPK_ON;}
 document.getElementById('mute').onclick=async()=>{
   muted=!muted;await store.set('callboard:muted',muted);renderMute();
