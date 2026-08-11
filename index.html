@@ -297,6 +297,10 @@
   .emoopt.novo{border-style:dashed;color:var(--brand-ink);font-weight:700}
   .edplus{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;
     border-radius:50%;background:var(--brand);color:#fff;font-size:12px;font-weight:700;margin-right:6px;line-height:1}
+  .diasrow{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .diabt{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--card);
+    font-family:inherit;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer}
+  .diabt.on{background:var(--ink);color:#fff;border-color:var(--ink)}
   .bkprow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   .bkpinfo{font-size:11.5px;color:var(--ans-ink);font-weight:600;margin-top:7px;min-height:15px}
   .bkpinfo.erro{color:var(--miss-ink)}
@@ -819,6 +823,12 @@
         <div class="sd" id="gravinfo" style="margin-top:3px"></div></div>
     </div>
     <div class="setrow" style="display:block">
+      <div><div class="sl">Dias de trabalho</div>
+        <div class="sd">Toque para escolher. Só estes dias entram no cálculo da média — os outros continuam no calendário e as ligações feitas neles seguem contando no total.</div></div>
+      <div class="diasrow" id="dias-uteis"></div>
+      <div class="sd" id="dias-info" style="margin-top:7px"></div>
+    </div>
+    <div class="setrow" style="display:block">
       <div><div class="sl">Cópia de segurança</div>
         <div class="sd">Baixe um arquivo com tudo: seus dias, contatos, equipe e metas. Serve para restaurar ou levar para outro aparelho.</div></div>
       <div class="bkprow">
@@ -982,6 +992,26 @@ function dayKey(d){
 function todayStr(){return dayKey(new Date());}
 function fmt(ds){const[y,m,d]=ds.split('-');return `${d}/${m}`;}
 function fmtLong(ds){const[y,m,d]=ds.split('-');return `${d}/${m}/${y}`;}
+/* ===== DIAS DE TRABALHO (0=domingo … 6=sábado) ===== */
+let DIAS_UTEIS=[1,2,3,4,5,6];   /* segunda a sábado por padrão */
+const NOME_DIA=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+const INICIAL_DIA=['D','S','T','Q','Q','S','S'];
+function ehDiaUtil(ds){return DIAS_UTEIS.includes(new Date(ds+'T12:00:00').getDay());}
+/* quantos dias de trabalho existem entre duas datas */
+function diasUteisEntre(from,to){
+  if(!from||!to||from>to)return 0;
+  let n=0;const d=new Date(from+'T12:00:00'),fim=new Date(to+'T12:00:00');
+  while(d<=fim){if(DIAS_UTEIS.includes(d.getDay()))n++;d.setDate(d.getDate()+1);}
+  return n;
+}
+function rotuloDiasUteis(){
+  if(DIAS_UTEIS.length===7)return 'todos os dias';
+  const ordem=DIAS_UTEIS.slice().sort((a,b)=>a-b);
+  const seq=ordem.every((v,i)=>i===0||v===ordem[i-1]+1);
+  if(seq&&ordem.length>2)return NOME_DIA[ordem[0]]+' a '+NOME_DIA[ordem[ordem.length-1]];
+  return ordem.map(d=>NOME_DIA[d]).join(', ');
+}
+function minDate(a,b){return a<b?a:b;}
 function weekendKey(ds){const g=new Date(ds+'T12:00:00').getDay();return g===0||g===6;}
 function collapse(s){return (s||'').trim().replace(/\s+/g,' ');}
 function normName(s){return collapse(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
@@ -1107,6 +1137,7 @@ async function load(){
   GOAL=st.goal||10; START_SLOTS=st.slots||10;
   CUSTOM_ACTS=Array.isArray(st.customActs)?st.customActs:[]; rebuildActs();
   CUSTOM_EMOS=Array.isArray(st.customEmos)?st.customEmos:[]; rebuildEmotions();
+  if(Array.isArray(st.diasUteis)&&st.diasUteis.length)DIAS_UTEIS=st.diasUteis.slice().sort();
   await loadTeam();
   SALES_GOALS=await store.get('callboard:salesgoals')||{};
   if(st.focus)FOCUS=Object.assign({},FOCUS,st.focus);
@@ -1139,6 +1170,10 @@ async function load(){
   }else{tmr={mode:'foco',running:false,endsAt:null,left:tmrDur('foco'),done:0};}
   const ps=progressSnapshot();gLevel=ps.lvl;gMedals=ps.med;
   diaAtualRef=today.date;
+  /* limpa registros vazios criados por engano em versões anteriores */
+  const antesPrune=history.length;
+  pruneHistory();
+  if(history.length!==antesPrune)await store.set('callboard:history',history);
   await testarGravacao();
   renderDate();renderList();renderScore(false);renderActs();renderResumo();renderContacts();renderGoalSub();renderTimer();
   /* confere a virada a cada meio minuto e sempre que o app volta ao primeiro plano */
@@ -1646,7 +1681,9 @@ function renderPerf(){
   const dAns=delta(cur.ans,prev?prev.ans:0);
   const curRate=pct(cur.ans,cur.made), prevRate=prev?pct(prev.ans,prev.made):0;
   const dRate=delta(curRate,prevRate);
-  const curMed=cur.dias?cur.made/cur.dias:0, prevMed=prev&&prev.dias?prev.made/prev.dias:0;
+  const curUteis=cur.from?diasUteisEntre(cur.from,minDate(cur.to,todayStr())):cur.dias;
+  const prevUteis=prev&&prev.from?diasUteisEntre(prev.from,prev.to):(prev?prev.dias:0);
+  const curMed=curUteis?cur.made/curUteis:0, prevMed=prevUteis?prev.made/prevUteis:0;
   const dMed=delta(Math.round(curMed*10),Math.round(prevMed*10));
   h+=`<div class="perfgrid">
     <div class="perfc"><div class="pn">${cur.made}</div><div class="pd ${dLig.cls}">${dLig.txt}</div><div class="pl">ligações</div></div>
@@ -1787,8 +1824,15 @@ function renderDayActs(ds){
       if(shown.length)ls.innerHTML='<div class="drtags">'+shown.map(t=>`<span class="drtag">${t.label} <b>${ag.tallies[t.key]}</b></span>`).join('')+'</div>'+ls.innerHTML;}
     return;
   }
-  const e=ensureHistEntry(ds);
-  const persist=async()=>{await persistHistory();renderCalendar();};
+  /* só OLHAR um dia não pode criar registro: a entrada nasce solta e só entra
+     no histórico quando ganha conteúdo de verdade */
+  const jaExiste=!!histEntry(ds);
+  const e=jaExiste?ensureHistEntry(ds)
+    :normEntry({date:ds,made:0,ans:0,mMade:0,mAns:0,aMade:0,aAns:0,tallies:{},details:{},actTimes:{},sales:[],focus:[],notes:'',calls:[]});
+  const persist=async()=>{
+    if(!histEntry(ds)&&dayHasContent(e)){history.push(e);history.sort((a,b)=>a.date<b.date?1:-1);}
+    await persistHistory();renderCalendar();
+  };
   buildTallies(gr,e,persist,RESULTS.filter(t=>t.key!=='vendas'));
   const sb=document.createElement('div');ls.parentNode.insertBefore(sb,ls);
   buildSales(sb,e,async()=>{syncSales(e);await persistHistory();renderCalendar();},()=>renderDayActs(ds),false);
@@ -1977,7 +2021,7 @@ function evolutionHTML(){
   h+=`<table class="reptable evotable"><thead><tr><th>${nomes[gran].charAt(0).toUpperCase()+nomes[gran].slice(1)}</th>
       <th>Dias</th><th>Ligações</th><th>Atend.</th><th>Taxa</th><th>Média/dia</th><th>Atividades</th></tr></thead><tbody>`+
     show.slice().reverse().map(g=>`<tr><td>${g.label}${g.sub?'<span class="hbsub">'+g.sub+'</span>':''}</td><td>${g.dias}</td><td>${g.made}</td>
-      <td>${g.ans}</td><td>${pct(g.ans,g.made)}%</td><td>${g.dias?(g.made/g.dias).toFixed(1):'0'}</td><td>${g.acts}</td></tr>`).join('')+
+      <td>${g.ans}</td><td>${pct(g.ans,g.made)}%</td><td>${(()=>{const u=g.from?diasUteisEntre(g.from,minDate(g.to,todayStr())):g.dias;return u?(g.made/u).toFixed(1):'0';})()}</td><td>${g.acts}</td></tr>`).join('')+
     `</tbody></table>`;
   return h;
 }
@@ -1998,12 +2042,12 @@ function renderReport(){
   const maxDay=Math.max(...days.map(h=>h.made),1);
   let html=`<div class="repsheet">
     <div class="rephead"><h2>Relatório de atividades</h2>
-      <div class="repsub">${fmtLong(from)} a ${fmtLong(to)} · ${days.length} dia${days.length>1?'s':''} com registro</div></div>
+      <div class="repsub">${fmtLong(from)} a ${fmtLong(to)} · ${days.length} dia${days.length>1?'s':''} com registro · ${diasUteisEntre(from,to)} dia${diasUteisEntre(from,to)>1?'s':''} de trabalho no período (${rotuloDiasUteis()})</div></div>
     <div class="repcards">
       <div class="repcard"><div class="rn">${T.made}</div><div class="rl">ligações</div></div>
       <div class="repcard"><div class="rn green">${T.ans}</div><div class="rl">atenderam</div></div>
       <div class="repcard"><div class="rn">${pct(T.ans,T.made)}%</div><div class="rl">taxa de atendimento</div></div>
-      <div class="repcard"><div class="rn">${(T.made/days.length).toFixed(1)}</div><div class="rl">média por dia</div></div>
+      <div class="repcard"><div class="rn">${(diasUteisEntre(from,to)?T.made/diasUteisEntre(from,to):0).toFixed(1)}</div><div class="rl">média por dia útil</div></div>
       <div class="repcard"><div class="rn gold">${metas}</div><div class="rl">metas batidas</div></div>
     </div>
 
@@ -2671,7 +2715,7 @@ function refreshAll(){
 /* ===== CONFIGURAÇÕES ===== */
 let setOpen=false;
 async function saveSettings(){await store.set('callboard:settings',
-  {goal:GOAL,slots:START_SLOTS,customActs:CUSTOM_ACTS,customEmos:CUSTOM_EMOS,focus:FOCUS});}
+  {goal:GOAL,slots:START_SLOTS,customActs:CUSTOM_ACTS,customEmos:CUSTOM_EMOS,focus:FOCUS,diasUteis:DIAS_UTEIS});}
 function actKeyFrom(label){
   const base='c_'+normName(label).replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,20);
   let k=base||'c_ativ',i=2;
@@ -2778,7 +2822,7 @@ function toggleSettings(force){
   setOpen=(force===undefined)?!setOpen:force;
   document.getElementById('settings').style.display=setOpen?'':'none';
   document.getElementById('gear').classList.toggle('on',setOpen);
-  if(setOpen){renderGoalSub();renderActChips();renderEmoChips();atualizarDiagnostico();}
+  if(setOpen){renderGoalSub();renderActChips();renderEmoChips();atualizarDiagnostico();renderDiasUteis();}
 }
 function bindSettings(){
   document.getElementById('gear').onclick=()=>toggleSettings();
@@ -3471,6 +3515,29 @@ function atualizarDiagnostico(){
   if(gravacaoOK===null){el.textContent='';return;}
   el.textContent=gravacaoOK?'Gravação funcionando neste aparelho ✓':'ATENÇÃO: o navegador está recusando gravar';
   el.style.color=gravacaoOK?'var(--ans-ink)':'var(--miss-ink)';
+}
+function renderDiasUteis(){
+  const host=document.getElementById('dias-uteis');if(!host)return;
+  host.innerHTML='';
+  for(let d=0;d<7;d++){
+    const b=document.createElement('button');
+    b.className='diabt'+(DIAS_UTEIS.includes(d)?' on':'');
+    b.type='button';b.textContent=INICIAL_DIA[d];
+    b.setAttribute('aria-label',NOME_DIA[d]);
+    b.setAttribute('aria-pressed',DIAS_UTEIS.includes(d)?'true':'false');
+    b.onclick=async()=>{
+      if(DIAS_UTEIS.includes(d)){
+        if(DIAS_UTEIS.length===1){flash('Pelo menos um dia precisa ficar marcado');return;}
+        DIAS_UTEIS=DIAS_UTEIS.filter(x=>x!==d);
+      }else DIAS_UTEIS=DIAS_UTEIS.concat(d).sort();
+      await saveSettings();
+      renderDiasUteis();renderProgress();renderReport();renderGoalSub();
+      flash('Média calculada sobre '+rotuloDiasUteis());
+    };
+    host.appendChild(b);
+  }
+  const info=document.getElementById('dias-info');
+  if(info)info.textContent='A média conta '+rotuloDiasUteis()+'.';
 }
 function renderMute(){document.getElementById('mute').innerHTML=muted?SPK_OFF:SPK_ON;}
 document.getElementById('mute').onclick=async()=>{
