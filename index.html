@@ -963,14 +963,23 @@ const RESULTS=[
 ];
 
 const store={
-  async get(k){try{const r=await window.storage.get(k);return r?JSON.parse(r.value):null;}catch(e){return mem[k]??null;}},
-  async set(k,v){try{await window.storage.set(k,JSON.stringify(v));return true;}catch(e){mem[k]=v;return true;}}
+  get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}},
+  set(k,v){
+    try{localStorage.setItem(k,JSON.stringify(v));return true;}
+    catch(e){
+      try{if(typeof bannerAviso==='function')bannerAviso('O app não conseguiu guardar a última alteração',
+        'Saia da navegação privada do Safari e abra pelo ícone na tela de início. Se o aviso continuar, use a cópia de segurança na engrenagem.','erro');}catch(_){}
+      return false;
+    }
+  }
 };
-let mem={};
-const MODO_TESTE=true;   /* versão de teste: os dados não ficam no aparelho */
+const MODO_TESTE=false;
 
-function todayStr(){const d=new Date();return d.toISOString().slice(0,10);}
-function dayKey(d){return d.toISOString().slice(0,10);}
+/* data do RELÓGIO DO APARELHO — toISOString devolveria UTC e viraria o dia às 21h no Brasil */
+function dayKey(d){
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function todayStr(){return dayKey(new Date());}
 function fmt(ds){const[y,m,d]=ds.split('-');return `${d}/${m}`;}
 function fmtLong(ds){const[y,m,d]=ds.split('-');return `${d}/${m}/${y}`;}
 function weekendKey(ds){const g=new Date(ds+'T12:00:00').getDay();return g===0||g===6;}
@@ -3388,7 +3397,7 @@ const CHAVES_BACKUP=['callboard:history','callboard:today','callboard:contacts',
   'callboard:team','callboard:salesgoals','callboard:timer','callboard:muted',
   'callboard:seed:v1','callboard:team:seed:v1'];
 async function exportarDados(){
-  const pacote={app:'Vivaz',versao:1,gerado:new Date().toISOString(),dados:{}};
+  const pacote={app:'Vivaz',versao:1,gerado:new Date().toISOString(),data:todayStr(),dados:{}};
   for(const k of CHAVES_BACKUP){
     const v=await store.get(k);
     if(v!==null&&v!==undefined)pacote.dados[k]=v;
@@ -3416,7 +3425,7 @@ async function importarDados(file){
     const pacote=JSON.parse(txt);
     if(!pacote||!pacote.dados||typeof pacote.dados!=='object')throw new Error('formato');
     const dias=(pacote.dados['callboard:history']||[]).length;
-    if(!confirm(`Restaurar a cópia de ${pacote.gerado?fmtLong(pacote.gerado.slice(0,10)):'data desconhecida'}?\n\n${dias} dia(s) de histórico. Isso substitui o que está neste aparelho agora.`))return;
+    if(!confirm(`Restaurar a cópia de ${pacote.data?fmtLong(pacote.data):(pacote.gerado?fmtLong(pacote.gerado.slice(0,10)):'data desconhecida')}?\n\n${dias} dia(s) de histórico. Isso substitui o que está neste aparelho agora.`))return;
     for(const k of CHAVES_BACKUP){
       if(pacote.dados[k]!==undefined)await store.set(k,pacote.dados[k]);
     }
