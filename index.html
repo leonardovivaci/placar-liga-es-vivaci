@@ -178,6 +178,21 @@
   .perfspark .sp.cur{background:var(--brand)}
   .perfsparkl{display:flex;gap:5px;margin-top:5px}
   .perfsparkl span{flex:1;text-align:center;font-size:10px;color:var(--muted)}
+  .perfverdict{margin-top:12px;font-family:'Fraunces',serif;font-size:15px;line-height:1.3}
+  .perfverdict.up{color:var(--ans-ink)} .perfverdict.down{color:var(--miss-ink)} .perfverdict.flat{color:var(--muted)}
+  .perfc.hero{background:#fff;border-color:#D9E7EF}
+  .perfc .pcap{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.3}
+  .pill{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:99px;background:var(--brand-soft);color:var(--brand-ink)}
+  .perfchart{margin-top:24px}
+  .perfbars{position:relative;display:flex;align-items:flex-end;gap:6px;height:110px;border-bottom:1px solid var(--line);overflow:visible}
+  .perfbars .pb{flex:1;background:#EFEBE3;border-radius:4px 4px 0 0;position:relative;min-height:3px}
+  .perfbars .pb i{position:absolute;left:0;right:0;bottom:0;background:var(--ans);border-radius:0 0 4px 4px;display:block}
+  .perfbars .pb.cur{background:var(--brand)}
+  .perfbars .pb .pbv{position:absolute;top:-17px;left:0;right:0;text-align:center;font-size:11px;font-weight:700;color:var(--brand-ink);font-variant-numeric:tabular-nums}
+  .perfref{position:absolute;left:0;right:0;border-top:2px dashed var(--miss);pointer-events:none;z-index:1}
+  .perfref span{position:absolute;right:0;top:-15px;font-size:9.5px;color:var(--miss-ink);background:var(--card);padding:0 4px}
+  .perfbarsl{display:flex;gap:6px;margin-top:5px}
+  .perfbarsl span{flex:1;text-align:center;font-size:10px;color:var(--muted)}
   .actadmin{margin-top:6px}
   .actchiprow{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}
   .actchip{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;background:#F6F4EF;
@@ -380,6 +395,71 @@
   .milestone .mt{font-family:'Fraunces',serif;font-weight:600;font-size:15px}
   .milestone .ms{font-size:12px;color:var(--muted);margin-left:auto}
 
+  .mixbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin-top:12px}
+  .mxh{font-weight:650;font-size:14.5px}
+  .mxs{font-size:12px;color:var(--muted);margin:3px 0 10px}
+  .mxr{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:7px 0}
+  .mxl{font-size:12.5px;min-width:145px}
+  .mxt{flex:1;min-width:90px;height:9px;background:#F1EDE6;border-radius:6px;overflow:hidden}
+  .mxf{height:100%;background:var(--ans);border-radius:6px}
+  .mxv{font-size:12px;font-weight:600;min-width:76px;text-align:right}
+  .mxd{font-size:11px;color:var(--muted);min-width:88px}
+  .srbox{background:#FBF4F2;border:1px solid #EEDCD6;border-radius:15px;padding:12px 14px;margin-bottom:12px}
+  .srh{font-weight:650;font-size:14.5px;display:flex;align-items:center;gap:7px}
+  .srn{background:#B5715C;color:#fff;border-radius:20px;font-size:11.5px;padding:1px 8px;font-weight:600}
+  .srs{font-size:12px;color:var(--muted);margin:3px 0 9px}
+  .srl{display:flex;flex-wrap:wrap;gap:6px}
+  .srp{font-size:12.5px;background:#fff;border:1px solid #EEDCD6;border-radius:8px;padding:4px 9px}
+  .gfctl{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:12px}
+  .gfg{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:6px 0}
+  .gfl{font-size:11.5px;color:var(--muted);min-width:74px;text-transform:uppercase;letter-spacing:.4px}
+  .gfrow{display:flex;gap:5px;background:#F1EDE6;padding:3px;border-radius:10px;flex-wrap:wrap}
+  .gfchip{font:inherit;font-size:13px;border:0;background:transparent;color:var(--muted);
+    border-radius:8px;padding:6px 12px;cursor:pointer;font-weight:550}
+  .gfchip.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .gfcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px 16px}
+  .gfh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+  .gfh h3{font-size:15.5px}
+  .gfsub{font-size:12px;color:var(--muted)}
+  .gfbars{display:flex;align-items:flex-end;gap:5px;height:210px;padding-top:18px}
+  .gfb{flex:1;background:var(--brand2);border-radius:5px 5px 0 0;position:relative;min-width:9px}
+  .gfb.cur{background:var(--brand)}
+  .gfb b{position:absolute;top:-16px;left:0;right:0;text-align:center;font-size:10.5px;color:var(--muted);font-weight:600}
+  .gfbl{display:flex;gap:5px;margin-top:6px}
+  .gfbl span{flex:1;text-align:center;font-size:10px;color:var(--muted);overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap;min-width:9px}
+  .dupbox{background:#FDF6EA;border:1px solid #EFDFC4;border-radius:15px;padding:12px 14px;margin-bottom:12px}
+  .dbh{font-weight:650;font-size:14.5px;display:flex;align-items:center;gap:7px}
+  .dbn{background:var(--miss);color:#fff;border-radius:20px;font-size:11.5px;padding:1px 8px;font-weight:600}
+  .dbs{font-size:12px;color:var(--muted);margin:3px 0 9px}
+  .dbrow{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:7px 0;border-top:1px solid #EFDFC4}
+  .dbp{font-size:13.5px;flex:1;min-width:170px}
+  .dbq{font-size:11px;color:var(--muted)}
+  .dbx{color:var(--miss);font-weight:700;margin:0 2px}
+  .dbm{font-size:11.5px;color:var(--muted)}
+  .dbb{font:inherit;font-size:12.5px;font-weight:600;color:#fff;background:var(--miss);
+    border:0;border-radius:8px;padding:6px 13px;cursor:pointer}
+  .namesug{display:flex;flex-direction:column;gap:2px;margin-top:6px;background:var(--card);
+    border:1px solid var(--line);border-radius:11px;padding:4px;box-shadow:0 6px 18px rgba(0,0,0,.07);max-width:460px}
+  .nsopt{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;width:100%;text-align:left;font:inherit;
+    background:transparent;border:0;border-radius:8px;padding:7px 9px;cursor:pointer}
+  .nsopt:hover,.nsopt.on{background:var(--brand-soft)}
+  .nsn{font-weight:600;font-size:14px}
+  .nsm{font-size:11.5px;color:var(--muted)}
+  .callnow{background:var(--brand-soft);border:1px solid #CDE4F0;border-radius:18px;padding:13px 15px 15px}
+  .cnhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .cnhead h2{font-size:16px;color:var(--brand-ink)}
+  .cnhead .sub{font-size:12px;color:var(--muted)}
+  .cnrow{display:flex;flex-direction:column;gap:8px}
+  .cnc{background:var(--card);border:1px solid #DCEAF3;border-radius:13px;padding:10px 12px;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .cnn{font-weight:650;font-size:15px}
+  .cnm{font-size:12.5px;color:var(--muted);flex:1;min-width:140px}
+  .cnb{font:inherit;font-size:13px;font-weight:600;color:#fff;background:var(--brand);
+    border:0;border-radius:9px;padding:8px 13px;cursor:pointer;white-space:nowrap}
+  .cnb:active{transform:translateY(1px)}
+  .slot.justadded{animation:jadd 1.1s ease}
+  @keyframes jadd{0%{background:var(--brand-soft)}100%{background:transparent}}
   .lane{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px 16px;box-shadow:var(--shadow)}
   .lane header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
   .lane h2{font-size:16px}
@@ -591,6 +671,7 @@
   .cbarwrap{flex:1;min-width:22px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:3px}
   .cbar{width:100%;background:var(--ink);border-radius:4px 4px 0 0;position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:3px}
   .cbarans{width:100%;background:var(--ans);border-radius:4px 4px 0 0}
+  .chart .cbar.cur{background:var(--brand)}
   .cbarlab{font-size:9px;color:var(--muted);white-space:nowrap}
   .cbarval{font-size:10px;font-weight:600;font-variant-numeric:tabular-nums}
   .chartleg{display:flex;gap:16px;font-size:11px;color:var(--muted);margin-top:8px}
@@ -669,6 +750,7 @@
       <button class="tab" data-v="calendario">Calendário</button>
       <button class="tab" data-v="metas">Metas</button>
       <button class="tab" data-v="equipe">Equipe</button>
+      <button class="tab" data-v="graficos">Gráficos</button>
       <button class="tab" data-v="relatorio">Relatório</button>
     </div>
     <div class="toolbtns">
@@ -708,6 +790,8 @@
       </div>
       <div class="ftotal" id="ftotal"></div>
     </div>
+
+    <section class="callnow" id="callnow" style="display:none"></section>
 
     <section class="lane">
       <header><h2>Ligações de hoje</h2></header>
@@ -919,6 +1003,11 @@
     </div>
   </div>
 
+  <div id="view-graficos" class="noprint" style="display:none">
+    <div class="gfctl" id="gf-ctl"></div>
+    <div id="gf-body"></div>
+  </div>
+
   <div id="view-relatorio" style="display:none">
     <div class="repbar noprint">
       <input type="date" id="rep-from"><span class="sub">até</span><input type="date" id="rep-to">
@@ -973,17 +1062,11 @@ const RESULTS=[
 ];
 
 const store={
-  get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}},
-  set(k,v){
-    try{localStorage.setItem(k,JSON.stringify(v));return true;}
-    catch(e){
-      try{if(typeof bannerAviso==='function')bannerAviso('O app não conseguiu guardar a última alteração',
-        'Saia da navegação privada do Safari e abra pelo ícone na tela de início. Se o aviso continuar, use a cópia de segurança na engrenagem.','erro');}catch(_){}
-      return false;
-    }
-  }
+  get(k){try{const r=localStorage.getItem(k);return r===null?null:JSON.parse(r);}catch(e){return mem[k]??null;}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){mem[k]=v;return false;}}
 };
-const MODO_TESTE=false;
+let mem={};
+const MODO_TESTE=false;  /* produção: os dados ficam guardados no aparelho */
 
 /* data do RELÓGIO DO APARELHO — toISOString devolveria UTC e viraria o dia às 21h no Brasil */
 function dayKey(d){
@@ -1022,7 +1105,7 @@ function emptyCalls(){return Array.from({length:START_SLOTS},()=>({name:'',statu
 function freshDay(){return {date:todayStr(),calls:emptyCalls(),tallies:{},details:{},actTimes:{},sales:[],focus:[],notes:'',m5:false,m10:false};}
 
 let today=null, history=[], contacts={}, muted=false;
-let slotEls=[], emoOpen=null, editOpen=null, contactFilter='';
+let slotEls=[], emoOpen=null, editOpen=null, contactFilter='', sugOpen=null;
 let lastMade=0,lastAns=0,gLevel=1,gMedals=0;
 
 /* ===== SOM ===== */
@@ -1108,9 +1191,12 @@ async function runSeed(){
 }
 
 /* ===== VIRADA DE DIA COM O APP ABERTO ===== */
-let diaAtualRef=null;
+let diaAtualRef=null, horaRef=null;
 async function checarViradaDeDia(){
   const agora=todayStr();
+  const hAgora=new Date().getHours();
+  if(horaRef===null)horaRef=hAgora;
+  else if(hAgora!==horaRef){horaRef=hAgora;renderCallNow();}
   if(!diaAtualRef){diaAtualRef=agora;return;}
   if(agora===today.date)return;
   /* o relógio passou da meia-noite com o app aberto */
@@ -1216,7 +1302,9 @@ function renderList(){
       row.appendChild(t);}
     const inp=document.createElement('input');inp.type='text';inp.value=s.name;inp.autocomplete='off';
     inp.placeholder='Nome do lead…';
-    inp.oninput=()=>{s.name=inp.value;save();updateMeta();};
+    inp.oninput=()=>{s.name=inp.value;save();sugOpen=i;updateMeta();};
+    inp.onfocus=()=>{sugOpen=i;updateMeta();};
+    inp.onblur=()=>{setTimeout(()=>{if(sugOpen===i){sugOpen=null;updateMeta();}},180);};
     const mood=document.createElement('button');mood.className='moodbtn';mood.type='button';
     mood.setAttribute('aria-label','sentimento nesta ligação');
     mood.onclick=()=>{emoOpen=(emoOpen===i)?null:i;updateMeta();};
@@ -1250,6 +1338,22 @@ function updateMeta(){
         const chip=document.createElement('span');chip.className='chip known';
         chip.textContent=`já registrado · ${bt.short} · ${st.total} lig`;meta.appendChild(chip);}
       if(cnt[n]>1){const w=document.createElement('span');w.className='chip dup';w.textContent='repetido hoje';meta.appendChild(w);}
+    }
+    if(sugOpen===i){
+      const achados=buscarContatos(s.name,6);
+      if(achados.length){
+        const box=document.createElement('div');box.className='namesug';
+        achados.forEach(a=>{
+          const b=document.createElement('button');b.type='button';b.className='nsopt'+(normName(a.c.display)===n?' on':'');
+          const bt=bestTime(a.c,a.st);
+          b.innerHTML=`<span class="nsn">${esc(a.c.display)}</span>`+
+            `<span class="nsm">${a.st.total} lig · ${a.st.ans} atend${bt.short!=='—'?' · '+esc(bt.short):''}</span>`;
+          b.onmousedown=e=>e.preventDefault();   /* não deixa o blur fechar antes do clique */
+          b.onclick=()=>{s.name=a.c.display;save();sugOpen=null;renderList();};
+          box.appendChild(b);
+        });
+        meta.appendChild(box);
+      }
     }
     if(emo||s.emotionNote){
       const ec=document.createElement('span');ec.className='emochip';
@@ -1321,6 +1425,7 @@ function updateMeta(){
       meta.appendChild(pick);
     }
   });
+  renderCallNow();
 }
 function pulse(el){el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse');}
 function renderScore(animate){
@@ -1513,10 +1618,15 @@ function commitContacts(day){
   });
 }
 function contactStats(c){
-  let mTot=0,mAns=0,aTot=0,aAns=0;
-  (c.calls||[]).forEach(x=>{const p=x.period||periodOf(x.time)||'m';
-    if(p==='m'){mTot++;if(x.answered)mAns++;}else{aTot++;if(x.answered)aAns++;}});
-  return{total:(c.calls||[]).length,ans:mAns+aAns,mTot,mAns,aTot,aAns};
+  let mTot=0,mAns=0,aTot=0,aAns=0,semHora=0;
+  /* o turno vem SEMPRE da hora registrada. Ligação sem hora fica de fora da comparação
+     de turno em vez de ser contada como manhã — senão o "melhor horário" puxa pra manhã sozinho. */
+  (c.calls||[]).forEach(x=>{const p=x.time?periodOf(x.time):null;
+    if(p==='m'){mTot++;if(x.answered)mAns++;}
+    else if(p==='t'){aTot++;if(x.answered)aAns++;}
+    else semHora++;});
+  const calls=c.calls||[];
+  return{total:calls.length,ans:calls.filter(x=>x.answered).length,mTot,mAns,aTot,aAns,semHora};
 }
 function typicalHour(c){
   const hs=(c.calls||[]).filter(x=>x.answered&&x.time).map(x=>parseInt(x.time.slice(0,2),10)).sort((a,b)=>a-b);
@@ -1533,9 +1643,102 @@ function bestTime(c,st){
   if(st.total===0)return{short:'—',long:'sem ligações ainda'};
   if(st.ans===0)return{short:'sem atend.',long:`${st.total} tentativa${st.total>1?'s':''} até agora, ninguém atendeu`};
   const cedo=st.ans<3?' · ainda é cedo para dizer que é um padrão':'';
-  if(st.mAns>st.aAns)return{short:th?`~${th}`:'manhã',long:`atendeu ${st.mAns} de ${st.mTot} de manhã`+(th?` · costuma atender por volta das ${th}`:cedo)};
-  if(st.aAns>st.mAns)return{short:th?`~${th}`:'tarde',long:`atendeu ${st.aAns} de ${st.aTot} à tarde`+(th?` · costuma atender por volta das ${th}`:cedo)};
-  return{short:th?`~${th}`:'manhã/tarde',long:`atende parecido nos dois turnos (${st.mAns} manhã · ${st.aAns} tarde)`};
+  const semH=st.semHora?` · ${st.semHora} sem hora registrada`:'';
+  if(st.mTot+st.aTot===0)return{short:'—',long:`atendeu ${st.ans} de ${st.total}, mas nenhuma ligação tem hora — sem hora não dá pra dizer o turno`};
+  /* compara TAXA de atendimento por turno (não a contagem):
+     10 lig/4 atend de manhã perde para 2 lig/2 atend à tarde */
+  const mR=st.mTot?st.mAns/st.mTot:null, aR=st.aTot?st.aAns/st.aTot:null;
+  /* só há dado de um dos turnos */
+  if(mR===null||aR===null){
+    const manha=aR===null, t=manha?st.mAns:st.aAns, tot=manha?st.mTot:st.aTot, rot=manha?'de manhã':'à tarde';
+    if(t===0)return{short:th?`~${th}`:'—',long:`${tot} tentativa${tot>1?'s':''} ${rot}, ninguém atendeu ainda`};
+    return{short:th?`~${th}`:(manha?'manhã':'tarde'),long:`atendeu ${t} de ${tot} ${rot}`+(th?` · costuma atender por volta das ${th}`:cedo)};
+  }
+  /* dois turnos com dado */
+  const dif=Math.abs(mR-aR), vence=mR>=aR?'m':'a', vTot=vence==='m'?st.mTot:st.aTot;
+  const RUIDO=0.25;   /* diferença de taxa menor que isso é ruído, não sinal */
+  const MIN=2;        /* 1 de 1 não faz padrão */
+  const fm=`${st.mAns}/${st.mTot} manhã · ${st.aAns}/${st.aTot} tarde${semH}`;
+  if(vTot<MIN)return{short:th?`~${th}`:'—',long:`ainda são poucos dados para cravar um turno (${fm})`};
+  if(dif<RUIDO)return{short:th?`~${th}`:'manhã/tarde',long:`atende parecido nos dois turnos (${fm})`};
+  if(vence==='m')return{short:th?`~${th}`:'manhã',long:`atende mais de manhã (${st.mAns}/${st.mTot}) que à tarde (${st.aAns}/${st.aTot})`+(th?` · por volta das ${th}`:cedo)};
+  return{short:th?`~${th}`:'tarde',long:`atende mais à tarde (${st.aAns}/${st.aTot}) que de manhã (${st.mAns}/${st.mTot})`+(th?` · por volta das ${th}`:cedo)};
+}
+/* ===== LIGAR AGORA =====
+   O app já sabia o melhor horário de cada cliente, mas só contava se você fosse procurar.
+   Aqui ele responde sozinho a pergunta que importa: "quem eu ligo agora?" */
+function sugestoesAgora(limite){
+  const h=new Date().getHours(), turno=h<12?'m':'t';
+  const jaHoje=new Set();
+  today.calls.forEach(s=>{const n=normName(s.name);if(n)jaHoje.add(n);});
+  const out=[];
+  Object.entries(contacts).forEach(([key,c])=>{
+    if(jaHoje.has(key))return;                 /* já está na lista de hoje */
+    const st=contactStats(c);
+    if(st.ans===0)return;                      /* sem nenhum atendimento não há padrão nenhum */
+    const th=typicalHour(c);
+    if(th){
+      const dif=Math.abs(parseInt(th,10)-h);
+      if(dif<=1){out.push({c,st,tier:1,dif,
+        motivo:`costuma atender por volta das ${th} · ${st.ans} de ${st.total}`});return;}
+    }
+    const tTot=turno==='m'?st.mTot:st.aTot, tAns=turno==='m'?st.mAns:st.aAns;
+    const oTot=turno==='m'?st.aTot:st.mTot, oAns=turno==='m'?st.aAns:st.mAns;
+    if(tTot<2||tAns===0)return;                /* 1 de 1 não faz padrão */
+    const tR=tAns/tTot, oR=oTot?oAns/oTot:0;
+    if(oTot&&tR<oR+0.25)return;                /* neste turno ele não é melhor: não sugere */
+    out.push({c,st,tier:2,taxa:tR,tTot,
+      motivo:`atendeu ${tAns} de ${tTot} ${turno==='m'?'de manhã':'à tarde'}`});
+  });
+  out.sort((a,b)=>a.tier-b.tier||
+    (a.tier===1?(a.dif-b.dif)||(b.st.ans-a.st.ans):(b.taxa-a.taxa)||(b.tTot-a.tTot)));
+  return out.slice(0,limite||3);
+}
+function usarSugestao(nome){
+  let idx=today.calls.findIndex(s=>!collapse(s.name)&&s.status===0);
+  if(idx<0){today.calls.push({name:'',status:0});idx=today.calls.length-1;}
+  today.calls[idx].name=nome;
+  save();renderList();
+  const ref=slotEls[idx];
+  if(ref){ref.li.scrollIntoView({block:'center',behavior:'smooth'});
+    ref.li.classList.add('justadded');setTimeout(()=>ref.li.classList.remove('justadded'),1200);}
+  flash(`${nome} entrou na lista de hoje`);
+}
+function renderCallNow(){
+  const host=document.getElementById('callnow');if(!host)return;
+  const list=sugestoesAgora(3);
+  if(!list.length){host.style.display='none';host.innerHTML='';return;}
+  const h=String(new Date().getHours()).padStart(2,'0');
+  host.style.display='';
+  host.innerHTML=`<div class="cnhead"><h2>Ligar agora</h2>
+      <span class="sub">${h}h · pelo histórico deste horário</span></div>
+    <div class="cnrow">`+list.map((s,i)=>
+      `<div class="cnc"><span class="cnn">${esc(s.c.display)}</span>
+        <span class="cnm">${esc(s.motivo)}</span>
+        <button class="cnb" type="button" data-i="${i}">colocar na lista</button></div>`).join('')+`</div>`;
+  host.querySelectorAll('.cnb').forEach(b=>{
+    b.onclick=()=>usarSugestao(list[parseInt(b.dataset.i,10)].c.display);});
+}
+/* busca contatos já conhecidos por qualquer pedaço do nome — evita gravar a mesma
+   pessoa escrita de dois jeitos ("Fernando chafick" e "Fernando Chafik") */
+function buscarContatos(termo,limite){
+  const t=normName(termo);
+  if(t.length<2)return [];
+  const out=[];
+  Object.values(contacts).forEach(c=>{
+    const n=normName(c.display);
+    if(n===t)return;                     /* já é exatamente esse: nada a sugerir */
+    let peso=null;
+    if(n.startsWith(t))peso=0;
+    else if(n.split(' ').some(w=>w.startsWith(t)))peso=1;
+    else if(n.includes(t))peso=2;
+    if(peso===null)return;
+    const st=contactStats(c);
+    out.push({c,st,peso});
+  });
+  out.sort((a,b)=>a.peso-b.peso||b.st.total-a.st.total||
+    a.c.display.localeCompare(b.c.display,'pt-BR'));
+  return out.slice(0,limite||6);
 }
 function topEmotion(c){
   const cnt={};(c.calls||[]).forEach(x=>{if(x.emotion)cnt[x.emotion]=(cnt[x.emotion]||0)+1;});
@@ -1549,6 +1752,54 @@ function emotionBank(from,to){
   today.calls.forEach(s=>{if(s.emotion&&s.status>0&&(!from||(today.date>=from&&today.date<=to)))cnt[s.emotion]=(cnt[s.emotion]||0)+1;});
   return cnt;
 }
+/* ===== CONTATOS DUPLICADOS =====
+   A mesma pessoa escrita de dois jeitos vira dois contatos, e aí nenhum dos dois
+   junta ligação suficiente pra formar padrão de horário. Aqui o app aponta os suspeitos. */
+function distancia(a,b){
+  /* Levenshtein simples: quantas letras precisam mudar de um nome pro outro */
+  const m=a.length,n=b.length;
+  if(!m||!n)return Math.max(m,n);
+  let prev=Array.from({length:n+1},(_,j)=>j),cur=new Array(n+1);
+  for(let i=1;i<=m;i++){cur[0]=i;
+    for(let j=1;j<=n;j++){
+      cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));}
+    [prev,cur]=[cur,prev];}
+  return prev[n];
+}
+function paresDuplicados(){
+  const ks=Object.keys(contacts), out=[];
+  for(let i=0;i<ks.length;i++)for(let j=i+1;j<ks.length;j++){
+    const A=contacts[ks[i]],B=contacts[ks[j]];
+    const a=normName(A.display),b=normName(B.display);
+    let motivo=null;
+    if(b.startsWith(a+' '))motivo='um nome é o começo do outro';
+    else if(a.startsWith(b+' '))motivo='um nome é o começo do outro';
+    else{
+      const d=distancia(a,b), lim=Math.max(a.length,b.length);
+      if(lim>=6&&d>0&&d<=Math.max(1,Math.round(lim*0.12)))motivo='escrita quase igual';
+    }
+    if(!motivo)continue;
+    /* quem tem mais ligações vira o nome que fica */
+    const [kA,kB]=(A.calls||[]).length>=(B.calls||[]).length?[ks[i],ks[j]]:[ks[j],ks[i]];
+    out.push({fica:kA,vai:kB,motivo});
+  }
+  return out;
+}
+async function fundirContatos(kFica,kVai){
+  const A=contacts[kFica],B=contacts[kVai];
+  if(!A||!B)return;
+  A.calls=(A.calls||[]).concat(B.calls||[]).sort((x,y)=>x.date<y.date?-1:1);
+  delete contacts[kVai];
+  /* o histórico também passa a usar o nome que ficou, senão a fusão se desfaz sozinha */
+  history.forEach(e=>(e.calls||[]).forEach(c=>{
+    if(normName(c.name||'')===kVai)c.name=A.display;}));
+  today.calls.forEach(s=>{if(normName(s.name||'')===kVai)s.name=A.display;});
+  await store.set('callboard:contacts',contacts);
+  await store.set('callboard:history',history);
+  await store.set('callboard:today',today);
+  renderContacts();renderList();
+  flash(`Contatos juntados em "${A.display}"`);
+}
 function renderContacts(){
   const host=document.getElementById('contacts-list'),head=document.getElementById('contacts-count');
   let entries=Object.entries(contacts).map(([key,c])=>({key,c,st:contactStats(c)}));
@@ -1558,6 +1809,38 @@ function renderContacts(){
   if(f)entries=entries.filter(e=>normName(e.c.display).includes(f));
   entries.sort((a,b)=>b.st.total-a.st.total||a.c.display.localeCompare(b.c.display,'pt-BR'));
   host.innerHTML='';
+  if(!f){
+    const dups=paresDuplicados();
+    if(dups.length){
+      const dv=document.createElement('div');dv.className='dupbox';
+      dv.innerHTML=`<div class="dbh">Parecem a mesma pessoa <span class="dbn">${dups.length}</span></div>
+        <div class="dbs">Nomes separados não juntam histórico — juntando, o melhor horário fica mais confiável.</div>`;
+      dups.slice(0,8).forEach(d=>{
+        const row=document.createElement('div');row.className='dbrow';
+        const A=contacts[d.fica],B=contacts[d.vai];
+        row.innerHTML=`<span class="dbp"><b>${esc(A.display)}</b> <span class="dbq">${(A.calls||[]).length} lig</span>
+            <span class="dbx">+</span> ${esc(B.display)} <span class="dbq">${(B.calls||[]).length} lig</span></span>
+          <span class="dbm">${d.motivo}</span>`;
+        const b=document.createElement('button');b.className='dbb';b.type='button';
+        b.textContent='juntar';
+        b.onclick=()=>fundirContatos(d.fica,d.vai);
+        row.appendChild(b);dv.appendChild(row);
+      });
+      host.appendChild(dv);
+    }
+  }
+  if(!f){
+    const sr=semRetorno(3);
+    if(sr.length){
+      const gasto=sr.reduce((a,x)=>a+x.st.total,0);
+      const sv=document.createElement('div');sv.className='srbox';
+      sv.innerHTML=`<div class="srh">Insistência sem retorno <span class="srn">${sr.length}</span></div>
+        <div class="srs">${gasto} ligações em contatos que nunca atenderam. Não é ordem de parar — é só o número, para você decidir.</div>
+        <div class="srl">`+sr.slice(0,8).map(x=>
+          `<span class="srp">${esc(x.c.display)} <b>${x.st.total}×</b></span>`).join('')+`</div>`;
+      host.appendChild(sv);
+    }
+  }
   const bank=emotionBank();
   if(Object.keys(bank).length&&!f){
     const bb=document.createElement('div');bb.className='emobank';
@@ -1652,7 +1935,7 @@ function renderProgress(){
       <div class="lvstat"><div class="n flame">${cur}</div><div class="l">sequência atual</div></div>
       <div class="lvstat"><div class="n">${longest}</div><div class="l">sequência mais longa</div></div>
       <div class="lvstat"><div class="n">${s.activeDays}</div><div class="l">dias ativos</div></div>
-      <div class="lvstat"><div class="n">${s.lig}</div><div class="l">ligações</div></div></div></div>`;
+      <div class="lvstat"><div class="n">${s.lig}</div><div class="l">ligações no total</div></div></div></div>`;
   groups.forEach(g=>{
     const e=g.marks.filter(m=>g.val>=m).length;let nextDone=false;
     html+=`<div class="medgroup"><h3>${g.title}</h3><div class="gc">${e} de ${g.marks.length} · ${g.val} ${g.unit}</div><div class="medgrid">`;
@@ -1669,7 +1952,6 @@ let perfGran='mes';
 function setPerf(g){perfGran=g;renderPerf();}
 function renderPerf(){
   const host=document.getElementById('perf');if(!host)return;
-  const nomes={semana:'semana',mes:'mês'};
   const all=groupBy(perfGran);
   let h=`<div class="perf"><div class="perfhead"><h2>Seu desempenho</h2>
     <div class="perftabs">`+['semana','mes'].map(g=>
@@ -1677,37 +1959,57 @@ function renderPerf(){
     `</div></div>`;
   if(!all.length){host.innerHTML=h+`<div class="insight empty">Registre alguns dias e aqui aparece sua evolução — para você competir com você mesmo.</div></div>`;return;}
   const cur=all[all.length-1], prev=all.length>1?all[all.length-2]:null;
-  const dLig=delta(cur.made,prev?prev.made:0);
-  const dAns=delta(cur.ans,prev?prev.ans:0);
-  const curRate=pct(cur.ans,cur.made), prevRate=prev?pct(prev.ans,prev.made):0;
-  const dRate=delta(curRate,prevRate);
-  const curUteis=cur.from?diasUteisEntre(cur.from,minDate(cur.to,todayStr())):cur.dias;
-  const prevUteis=prev&&prev.from?diasUteisEntre(prev.from,prev.to):(prev?prev.dias:0);
-  const curMed=curUteis?cur.made/curUteis:0, prevMed=prevUteis?prev.made/prevUteis:0;
-  const dMed=delta(Math.round(curMed*10),Math.round(prevMed*10));
+  const M=perfDeltas(cur,prev,perfGran);
+  const nomeGran=M.nomeGran, passado=M.passado, anterior=M.anterior, parcial=M.parcial;
+  let vcls=M.verdict.cls, vtxt=M.verdict.txt;
+  /* se a taxa caiu mas a fatia de lista fria subiu, a queda é da mistura, não do trabalho */
+  if(prev&&M.dRate&&M.dRate.cls==='down'&&cur.from&&prev.from){
+    const a=classificarLigacoes(cur.from,minDate(cur.to,todayStr()));
+    const b=classificarLigacoes(prev.from,prev.to);
+    if(a.total>=8&&b.total>=8){
+      const dFria=a.shareFria-b.shareFria, dIns=a.shareInsist-b.shareInsist;
+      if(dIns>=0.10){
+        vcls='flat';
+        vtxt=`A taxa caiu junto com mais religações para quem ainda não tinha atendido (${Math.round(a.shareInsist*100)}% das ligações, contra ${Math.round(b.shareInsist*100)}%) — é o tipo que menos atende.`;
+      }else if(dFria>=0.10){
+        vcls='flat';
+        vtxt=`A taxa caiu, mas você ligou para mais gente nova (${Math.round(a.shareFria*100)}% contra ${Math.round(b.shareFria*100)}%) — lista fria atende menos por natureza.`;
+      }
+    }
+  }
+  h+=`<div class="perfverdict ${vcls}">${vtxt}</div>`;
+  const hero=(n,d,lab,cap)=>`<div class="perfc hero"><div class="pn">${n}</div>`+
+    (d?`<div class="pd ${d.cls}">${d.txt}</div>`:`<div class="pd flat">—</div>`)+
+    `<div class="pl">${lab}</div>`+(cap?`<div class="pcap">${cap}</div>`:'')+`</div>`;
   h+=`<div class="perfgrid">
-    <div class="perfc"><div class="pn">${cur.made}</div><div class="pd ${dLig.cls}">${dLig.txt}</div><div class="pl">ligações</div></div>
-    <div class="perfc"><div class="pn">${cur.ans}</div><div class="pd ${dAns.cls}">${dAns.txt}</div><div class="pl">atenderam</div></div>
-    <div class="perfc"><div class="pn">${curRate}%</div><div class="pd ${dRate.cls}">${dRate.txt}</div><div class="pl">taxa</div></div>
-    <div class="perfc"><div class="pn">${curMed.toFixed(1)}</div><div class="pd ${dMed.cls}">${dMed.txt}</div><div class="pl">média/dia</div></div>
+    ${hero(M.curMed.toFixed(1).replace('.',','),M.dMed,'por dia útil',prev?`vs ${M.prevMed.toFixed(1).replace('.',',')} ${passado}`:'seu ritmo')}
+    ${hero(M.curRate+'%',M.dRate,'taxa de atend.',prev?`vs ${M.prevRate}% ${passado}`:'atendimento')}
+    <div class="perfc"><div class="pn">${cur.made}</div><div class="pl">ligações no ${nomeGran}</div>${parcial?`<div class="pcap"><span class="pill">parcial</span> ${nomeGran} ainda não fechou`:(prev?`<div class="pcap">${delta(cur.made,prev.made).txt} vs ${passado}`:`<div class="pcap">`)}</div></div>
+    <div class="perfc"><div class="pn">${cur.ans}</div><div class="pl">atenderam</div><div class="pcap">${parcial?`no ${nomeGran} até hoje`:`no ${nomeGran}`}</div></div>
   </div>`;
   if(prev&&prev.made>0){
-    const falta=prev.made-cur.made, p=Math.min(100,Math.round(cur.made/prev.made*100));
+    const falta=prev.made-cur.made, pgp=Math.min(100,Math.round(cur.made/prev.made*100));
     const nome=prev.label+(prev.sub?' ('+prev.sub+')':'');
     h+=`<div class="perfgoal">
       <div class="pgt">${falta>0
-        ?`Faltam <b>${falta}</b> ligações para passar ${nome}`
-        :`Você já passou ${nome} — <b>${Math.abs(falta)}</b> ligações acima`}</div>
-      <div class="pgb"><div class="pgf" style="width:${p}%"></div></div>
-      <div class="pgs">${cur.made} de ${prev.made} · ${nome} foi seu ${nomes[perfGran]} anterior</div></div>`;
+        ?`Faltam <b>${falta}</b> ligações para passar ${anterior}`
+        :`Você já passou ${anterior} — <b>${Math.abs(falta)}</b> a mais`}</div>
+      <div class="pgb"><div class="pgf" style="width:${pgp}%"></div></div>
+      <div class="pgs">${cur.made} de ${prev.made} · ${nome} foi ${anterior}</div></div>`;
   }
   const show=all.slice(-8);
   const mx=Math.max(...show.map(g=>g.made),1);
-  h+=`<div class="perfspark">`+show.map((g,i)=>{
+  const prevH=prev?Math.round(prev.made/mx*100):null;
+  h+=`<div class="perfchart"><div class="perfbars">`+
+    (prevH!==null?`<div class="perfref" style="bottom:${prevH}%"><span>${nomeGran} passado · ${prev.made}</span></div>`:'')+
+    show.map((g,i)=>{
       const hh=Math.max(4,Math.round(g.made/mx*100));
       const ai=g.made?Math.round(g.ans/g.made*100):0;
-      return `<div class="sp${i===show.length-1?' cur':''}" style="height:${hh}%"><i style="height:${ai}%"></i></div>`;}).join('')+
-    `</div><div class="perfsparkl">`+show.map(g=>`<span>${g.label}</span>`).join('')+`</div>`;
+      const isCur=i===show.length-1;
+      return `<div class="pb${isCur?' cur':''}" style="height:${hh}%"><i style="height:${ai}%"></i>${isCur?`<b class="pbv">${g.made}</b>`:''}</div>`;
+    }).join('')+
+    `</div><div class="perfbarsl">`+show.map(g=>`<span>${g.label}</span>`).join('')+`</div></div>`;
+  h+=mixHTML(cur.from,minDate(cur.to,todayStr()));
   h+=`</div>`;
   host.innerHTML=h;
 }
@@ -1798,7 +2100,7 @@ function renderDayRecord(ds){
   let html=`<div class="dayrec"><div class="drtop"><h3>${title}</h3>`+
     (ag.live?'<span class="tag">dia em andamento</span>':'<span class="tag">só leitura</span>')+`</div>
     <div class="drnums">
-      <div><div class="n">${ag.made}</div><div class="l">ligações</div></div>
+      <div><div class="n">${ag.made}</div><div class="l">ligações no dia</div></div>
       <div><div class="n">${ag.ans}</div><div class="l">atenderam</div></div>
       <div><div class="n">${ag.mAns}/${ag.mMade}</div><div class="l">manhã</div></div>
       <div><div class="n">${ag.aAns}/${ag.aMade}</div><div class="l">tarde</div></div></div>`;
@@ -1962,7 +2264,7 @@ function isoWeek(ds){
 }
 function periodKeyOf(ds,gran){
   if(gran==='semana')return isoWeek(ds);
-  if(gran==='ano')return {key:ds.slice(0,4),label:ds.slice(0,4),sub:''};
+  if(gran==='ano'){const y=ds.slice(0,4);return {key:y,label:y,sub:'',from:y+'-01-01',to:y+'-12-31'};}
   const[y,m]=ds.split('-');
   const ult=new Date(parseInt(y,10),parseInt(m,10),0).getDate();
   return {key:`${y}-${m}`,label:MES[parseInt(m,10)-1].slice(0,3),sub:`01/${m} a ${ult}/${m}`,
@@ -1985,6 +2287,41 @@ function delta(cur,prev){
   if(p<0)return{txt:`${p}%`,cls:'down'};
   return{txt:'igual',cls:'flat'};
 }
+/* taxa: comparar em PONTOS percentuais (28%->35% = +7 pts, não +25%) */
+function deltaPts(cur,prev){
+  const d=cur-prev;
+  if(d>0)return{txt:`+${d} pts`,cls:'up'};
+  if(d<0)return{txt:`${d} pts`,cls:'down'};
+  return{txt:'igual',cls:'flat'};
+}
+/* média/dia: diferença absoluta, justa mesmo com o período pela metade */
+function deltaNum(cur,prev,dec,suf){
+  const d=cur-prev, thr=Math.pow(10,-dec)/2;
+  if(Math.abs(d)<thr)return{txt:'igual',cls:'flat'};
+  return{txt:(d>0?'+':'-')+Math.abs(d).toFixed(dec).replace('.',',')+(suf||''),cls:d>0?'up':'down'};
+}
+/* nucleo honesto de comparacao entre periodos — usado no Desempenho e na Evolucao.
+   Lidera por sinais justos mesmo com o periodo pela metade: ritmo (média/dia útil) e taxa. */
+function perfDeltas(cur,prev,gran){
+  const nomeGran=(gran==='mes'||gran==='mês')?'mês':gran==='ano'?'ano':'semana';
+  const parcial=cur.to?cur.to>todayStr():false;
+  const curUteis=cur.from?diasUteisEntre(cur.from,minDate(cur.to,todayStr())):cur.dias;
+  const prevUteis=prev&&prev.from?diasUteisEntre(prev.from,prev.to):(prev?prev.dias:0);
+  const curMed=curUteis?cur.made/curUteis:0, prevMed=prevUteis?prev.made/prevUteis:0;
+  const curRate=pct(cur.ans,cur.made), prevRate=prev?pct(prev.ans,prev.made):0;
+  const dMed=prev?deltaNum(curMed,prevMed,1,'/dia'):null;
+  const dRate=prev?deltaPts(curRate,prevRate):null;
+  const passado=nomeGran==='mês'?'o mês passado':nomeGran==='ano'?'o ano passado':'a semana passada';
+  const anterior=nomeGran==='mês'?'o mês anterior':nomeGran==='ano'?'o ano anterior':'a semana anterior';
+  let vcls='flat', vtxt;
+  if(!prev)vtxt=`Seu primeiro ${nomeGran} — a comparação aparece quando você fechar o próximo.`;
+  else if(prevUteis<2)vtxt=`Ainda são poucos dias em ${anterior} para uma comparação firme.`;
+  else{const d=curMed-prevMed;
+    if(d>=0.3){vcls='up';vtxt=`Seu ritmo está melhor que ${passado}.`;}
+    else if(d<=-0.3){vcls='down';vtxt=`Seu ritmo está abaixo d${passado} — dá pra retomar.`;}
+    else vtxt=`Seu ritmo está parecido com ${passado}.`;}
+  return {nomeGran,parcial,curUteis,prevUteis,curMed,prevMed,curRate,prevRate,dMed,dRate,passado,anterior,verdict:{cls:vcls,txt:vtxt}};
+}
 function setEvo(g){evoGran=g;renderReport();}
 function evolutionHTML(){
   const gran=evoGran, all=groupBy(gran);
@@ -1996,20 +2333,16 @@ function evolutionHTML(){
   if(all.length<1)return h+`<div class="drempty">Ainda sem dados para comparar.</div>`;
   const show=all.slice(-12);
   const cur=all[all.length-1], prev=all.length>1?all[all.length-2]:null;
-  const dLig=delta(cur.made,prev?prev.made:0);
-  const dAns=delta(cur.ans,prev?prev.ans:0);
-  const curRate=pct(cur.ans,cur.made), prevRate=prev?pct(prev.ans,prev.made):0;
-  const dRate=delta(curRate,prevRate);
-  const curMed=cur.dias?cur.made/cur.dias:0, prevMed=prev&&prev.dias?prev.made/prev.dias:0;
-  const dMed=delta(Math.round(curMed*10),Math.round(prevMed*10));
-  h+=`<div class="evocmp"><div class="evoc"><div class="ecl">${nomes[gran]} atual vs. anterior</div><div class="ecrow">
-      <div class="ec"><div class="ecn">${cur.made}</div><div class="ecd ${dLig.cls}">${dLig.txt}</div><div class="ecl2">ligações</div></div>
-      <div class="ec"><div class="ecn">${cur.ans}</div><div class="ecd ${dAns.cls}">${dAns.txt}</div><div class="ecl2">atenderam</div></div>
-      <div class="ec"><div class="ecn">${curRate}%</div><div class="ecd ${dRate.cls}">${dRate.txt}</div><div class="ecl2">taxa</div></div>
-      <div class="ec"><div class="ecn">${curMed.toFixed(1)}</div><div class="ecd ${dMed.cls}">${dMed.txt}</div><div class="ecl2">média/dia</div></div>
+  const M=perfDeltas(cur,prev,gran);
+  h+=`<div class="perfverdict ${M.verdict.cls}">${M.verdict.txt}</div>`;
+  h+=`<div class="evocmp"><div class="evoc"><div class="ecl">${nomes[gran]} atual vs. anterior${M.parcial?' · <span class="pill">parcial</span>':''}</div><div class="ecrow">
+      <div class="ec"><div class="ecn">${M.curMed.toFixed(1).replace('.',',')}</div><div class="ecd ${M.dMed?M.dMed.cls:'flat'}">${M.dMed?M.dMed.txt:'—'}</div><div class="ecl2">por dia útil</div></div>
+      <div class="ec"><div class="ecn">${M.curRate}%</div><div class="ecd ${M.dRate?M.dRate.cls:'flat'}">${M.dRate?M.dRate.txt:'—'}</div><div class="ecl2">taxa</div></div>
+      <div class="ec"><div class="ecn">${cur.made}</div><div class="ecd flat">${M.parcial?'parcial':(prev?delta(cur.made,prev.made).txt:'—')}</div><div class="ecl2">ligações</div></div>
+      <div class="ec"><div class="ecn">${cur.ans}</div><div class="ecd flat">${M.parcial?'parcial':(prev?delta(cur.ans,prev.ans).txt:'—')}</div><div class="ecl2">atenderam</div></div>
     </div></div></div>`;
   const maxM=Math.max(...show.map(g=>g.made),1);
-  h+=`<div class="chart">`+show.map(g=>`<div class="cbarwrap"><div class="cbar" style="height:${bar(g.made,maxM)}%">
+  h+=`<div class="chart">`+show.map((g,i)=>`<div class="cbarwrap"><div class="cbar${i===show.length-1?' cur':''}" style="height:${bar(g.made,maxM)}%">
       <div class="cbarans" style="height:${g.made?Math.round(g.ans/g.made*100):0}%"></div></div>
       <div class="cbarlab">${g.label}</div><div class="cbarval">${g.made}</div></div>`).join('')+`</div>
     <div class="chartleg"><span><i class="sw ink"></i>ligações</span><span><i class="sw green"></i>atenderam</span>
@@ -2044,7 +2377,7 @@ function renderReport(){
     <div class="rephead"><h2>Relatório de atividades</h2>
       <div class="repsub">${fmtLong(from)} a ${fmtLong(to)} · ${days.length} dia${days.length>1?'s':''} com registro · ${diasUteisEntre(from,to)} dia${diasUteisEntre(from,to)>1?'s':''} de trabalho no período (${rotuloDiasUteis()})</div></div>
     <div class="repcards">
-      <div class="repcard"><div class="rn">${T.made}</div><div class="rl">ligações</div></div>
+      <div class="repcard"><div class="rn">${T.made}</div><div class="rl">ligações no período</div></div>
       <div class="repcard"><div class="rn green">${T.ans}</div><div class="rl">atenderam</div></div>
       <div class="repcard"><div class="rn">${pct(T.ans,T.made)}%</div><div class="rl">taxa de atendimento</div></div>
       <div class="repcard"><div class="rn">${(diasUteisEntre(from,to)?T.made/diasUteisEntre(from,to):0).toFixed(1)}</div><div class="rl">média por dia útil</div></div>
@@ -3547,13 +3880,14 @@ document.getElementById('mute').onclick=async()=>{
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
   t.classList.add('active');const v=t.dataset.v;
-  ['hoje','contatos','progresso','calendario','metas','equipe','relatorio'].forEach(k=>{
+  ['hoje','contatos','progresso','calendario','metas','equipe','graficos','relatorio'].forEach(k=>{
     document.getElementById('view-'+k).style.display=(v===k)?'':'none';});
   if(v==='contatos')renderContacts();
   if(v==='progresso')renderProgress();
   if(v==='calendario')openCalendar();
   if(v==='metas')renderGoals();
   if(v==='equipe')openTeam();
+  if(v==='graficos')renderGraficos();
   if(v==='relatorio'){if(!document.getElementById('rep-from').value)setRangePreset('mes');else renderReport();}
 });
 document.getElementById('contacts-search').oninput=e=>{contactFilter=e.target.value;renderContacts();};
@@ -3562,9 +3896,142 @@ document.getElementById('cal-next').onclick=()=>{calM++;if(calM>11){calM=0;calY+
 document.getElementById('rep-from').onchange=renderReport;
 document.getElementById('rep-to').onchange=renderReport;
 document.querySelectorAll('.preset').forEach(b=>b.onclick=()=>setRangePreset(b.dataset.p));
+/* ===== TEMPERATURA DA LIGAÇÃO =====
+   Taxa de atendimento crua engana quando a mistura muda: ligar para lista fria
+   derruba a taxa mesmo com o trabalho ficando melhor. Aqui cada ligação é
+   classificada pelo que se sabia do contato ANTES dela acontecer. */
+function linhaDoTempo(){
+  const out=[];
+  history.slice().sort((a,b)=>a.date<b.date?-1:1).forEach(e=>{
+    (e.calls||[]).forEach(c=>{const k=normName(c.name||'');
+      if(k)out.push({date:e.date,key:k,ans:!!c.answered});});
+  });
+  today.calls.forEach(s=>{const k=normName(s.name||'');
+    if(k&&s.status>0)out.push({date:today.date,key:k,ans:s.status===2});});
+  return out;
+}
+function classificarLigacoes(from,to){
+  const antes={};   /* key -> {tent, ans} acumulado ATÉ antes desta ligação */
+  const z=()=>({m:0,a:0});
+  const r={fria:z(),quente:z(),insist:z()};
+  linhaDoTempo().forEach(x=>{
+    const st=antes[x.key]||{tent:0,ans:0};
+    let tipo;
+    if(st.tent===0)tipo='fria';           /* nunca liguei para essa pessoa */
+    else if(st.ans>0)tipo='quente';       /* já me atendeu antes */
+    else tipo='insist';                   /* já liguei e nunca atendeu */
+    if((!from||x.date>=from)&&(!to||x.date<=to)){r[tipo].m++;if(x.ans)r[tipo].a++;}
+    antes[x.key]={tent:st.tent+1,ans:st.ans+(x.ans?1:0)};
+  });
+  r.total=r.fria.m+r.quente.m+r.insist.m;
+  r.shareFria=r.total?r.fria.m/r.total:0;
+  r.shareInsist=r.total?r.insist.m/r.total:0;
+  return r;
+}
+function semRetorno(minTent){
+  /* contatos onde a insistência não está pagando */
+  const out=[];
+  Object.entries(contacts).forEach(([k,c])=>{
+    const st=contactStats(c);
+    if(st.ans===0&&st.total>=(minTent||3))out.push({key:k,c,st});
+  });
+  return out.sort((a,b)=>b.st.total-a.st.total);
+}
+function mixHTML(from,to){
+  const r=classificarLigacoes(from,to);
+  if(r.total<8)return '';
+  const linha=(rot,o,dica)=>{
+    if(!o.m)return '';
+    const taxa=pct(o.a,o.m);
+    return `<div class="mxr"><span class="mxl">${rot}</span>
+      <div class="mxt"><div class="mxf" style="width:${taxa}%"></div></div>
+      <span class="mxv">${taxa}% · ${o.a}/${o.m}</span><span class="mxd">${dica}</span></div>`;
+  };
+  return `<div class="mixbox"><div class="mxh">De onde vieram os atendimentos</div>
+    <div class="mxs">A taxa cheia mistura coisas diferentes. Separada, ela mostra onde a ligação rende.</div>`+
+    linha('Já tinha atendido antes',r.quente,'sua melhor aposta')+
+    linha('Primeira ligação',r.fria,'lista fria')+
+    linha('Nunca atendeu ainda',r.insist,'insistência')+
+    `</div>`;
+}
+/* ===== TELA DE GRÁFICOS =====
+   Mesma série de dados, formatos trocáveis. A leitura muda conforme a pergunta:
+   barra compara períodos, linha mostra tendência, horizontal ordena por tamanho. */
+let gfFonte='eu', gfMetrica='made', gfGran='semana', gfForma='barras';
+const GF_METRICAS=[['made','Ligações'],['ans','Atenderam'],['taxa','Taxa de atend.']];
+const GF_GRANS=[['dia','Dia'],['semana','Semana'],['mes','Mês']];
+const GF_FORMAS=[['barras','Barras'],['linha','Linha'],['horizontal','Horizontal']];
+function gfSet(campo,valor){
+  if(campo==='fonte')gfFonte=valor;
+  if(campo==='metrica')gfMetrica=valor;
+  if(campo==='gran')gfGran=valor;
+  if(campo==='forma')gfForma=valor;
+  renderGraficos();
+}
+function gfSerie(){
+  /* devolve {rot, valor, sub} já pronto pra qualquer formato */
+  if(gfFonte==='eu'){
+    if(gfGran==='dia'){
+      return allDays().slice(-21).map(d=>({rot:fmt(d.date),
+        valor:gfMetrica==='taxa'?pct(d.ans,d.made):(gfMetrica==='ans'?d.ans:d.made),
+        sub:`${d.ans}/${d.made}`}));
+    }
+    return groupBy(gfGran).slice(-14).map(g=>({rot:g.label,
+      valor:gfMetrica==='taxa'?pct(g.ans,g.made):(gfMetrica==='ans'?g.ans:g.made),
+      sub:`${g.ans}/${g.made}`}));
+  }
+  /* equipe: soma por corretor no intervalo escolhido na aba Equipe */
+  const regs=eqRange();
+  const nomes=[...new Set(regs.map(r=>r.broker))];
+  const campo=gfMetrica==='ans'?'ans':'made';
+  return nomes.map(n=>{
+    const meus=regs.filter(r=>r.broker===n);
+    const made=meus.reduce((a,r)=>a+(r.made||0),0);
+    const ans=meus.reduce((a,r)=>a+(r.ans||0),0);
+    return {rot:n,valor:gfMetrica==='taxa'?pct(ans,made):(campo==='ans'?ans:made),sub:`${ans}/${made}`};
+  }).sort((a,b)=>b.valor-a.valor);
+}
+function gfChips(campo,opcoes,atual){
+  return `<div class="gfrow">`+opcoes.map(([k,r])=>
+    `<button class="gfchip${k===atual?' on':''}" type="button" onclick="gfSet('${campo}','${k}')">${r}</button>`).join('')+`</div>`;
+}
+function renderGraficos(){
+  const ctl=document.getElementById('gf-ctl'),body=document.getElementById('gf-body');
+  if(!ctl||!body)return;
+  const fontes=[['eu','Meus dados'],['equipe','Equipe']];
+  ctl.innerHTML=`<div class="gfg"><span class="gfl">Fonte</span>${gfChips('fonte',fontes,gfFonte)}</div>
+    <div class="gfg"><span class="gfl">Métrica</span>${gfChips('metrica',GF_METRICAS,gfMetrica)}</div>`+
+    (gfFonte==='eu'?`<div class="gfg"><span class="gfl">Agrupar por</span>${gfChips('gran',GF_GRANS,gfGran)}</div>`:'')+
+    `<div class="gfg"><span class="gfl">Formato</span>${gfChips('forma',GF_FORMAS,gfForma)}</div>`;
+  const s=gfSerie();
+  const unidade=gfMetrica==='taxa'?'%':'';
+  const rotM=(GF_METRICAS.find(m=>m[0]===gfMetrica)||[])[1]||'';
+  if(s.length<1){body.innerHTML=`<div class="insight empty">Ainda sem dados para este recorte.</div>`;return;}
+  const max=Math.max(1,...s.map(x=>x.valor));
+  let g='';
+  if(gfForma==='horizontal'){
+    g=eqHBars(s.map(x=>({rot:x.rot,v:x.valor,txt:x.valor+unidade+(gfMetrica!=='taxa'?'':' · '+x.sub),
+      ans:gfMetrica==='ans'})),max);
+  }else if(gfForma==='linha'){
+    g=eqArea(s.map(x=>x.valor),s.map(x=>x.rot),'var(--brand)','#1B89BC',260,true)||
+      `<div class="insight empty">A linha precisa de ao menos dois pontos — troque para barras.</div>`;
+  }else{
+    g=`<div class="gfbars">`+s.map((x,i)=>
+      `<div class="gfb${i===s.length-1&&gfFonte==='eu'?' cur':''}" style="height:${Math.max(4,Math.round(x.valor/max*100))}%"
+        title="${esc(x.rot)}: ${x.valor}${unidade}"><b>${x.valor}${unidade}</b></div>`).join('')+
+      `</div><div class="gfbl">`+s.map(x=>`<span>${esc(x.rot)}</span>`).join('')+`</div>`;
+  }
+  const tot=s.reduce((a,x)=>a+x.valor,0);
+  const med=s.length?(tot/s.length):0;
+  body.innerHTML=`<div class="gfcard"><div class="gfh"><h3>${rotM} · ${gfFonte==='eu'?
+      (GF_GRANS.find(x=>x[0]===gfGran)||[])[1]:'por corretor'}</h3>
+      <span class="gfsub">${s.length} ${gfFonte==='eu'?'períodos':'corretores'} · média ${med.toFixed(1).replace('.',',')}${unidade}</span></div>
+    ${g}</div>`;
+}
 /* ===== EXPORTAR PDF DE QUALQUER ABA ===== */
 const VIEWS=[['hoje','Hoje'],['contatos','Contatos'],['progresso','Progresso'],
-             ['calendario','Calendário'],['metas','Metas'],['equipe','Equipe'],['relatorio','Relatório']];
+             ['calendario','Calendário'],['metas','Metas'],['equipe','Equipe'],
+             ['graficos','Gráficos'],['relatorio','Relatório']];
 function viewAtual(){
   for(const [k,rot] of VIEWS){
     const el=document.getElementById('view-'+k);
